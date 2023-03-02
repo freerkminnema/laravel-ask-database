@@ -47,15 +47,14 @@ class Oracle
 
     protected function queryOpenAi(string $prompt, string $stop, float $temperature = 0.0)
     {
-        $completions = $this->client->completions()->create([
-            'model' => 'text-davinci-003',
-            'prompt' => $prompt,
-            'temperature' => $temperature,
-            'max_tokens' => 100,
-            'stop' => $stop,
+        $chat = $this->client->chat()->create([
+            'model' => 'gpt-3.5-turbo',
+            'messages' => [
+                ['role' => 'user', 'content' => $prompt],
+            ],
         ]);
 
-        return $completions->choices[0]->text;
+        return $chat->choices[0]->text;
     }
 
     protected function buildPrompt(string $question, string $query = null, string $result = null): string
